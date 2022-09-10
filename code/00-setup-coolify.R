@@ -24,8 +24,14 @@ DBI::dbListTables(con)
 
 
 # replace table_name with the name of the table you need to use
-# df <- DBI::dbReadTable(con, "table_name")
+df <- DBI::dbReadTable(con, "q_response_labelled_en_v1")
 #
+quests = dbSendQuery(con, "SELECT question_item_id, COUNT(ques FROM q_response_labelled_de_v1")
+
+simplefreq <- dbSendQuery(con, "SELECT value, COUNT(value) FROM q_response_labelled_de_v1 WHERE question_item_id = 'q1' GROUP BY value ")
+dbFetch(res)
+
+
 # readr::write_rds(df, here::here("data", "raw", "data.rds"))
 #
 # # code to show how to reimport data file - copy to your code if needed
