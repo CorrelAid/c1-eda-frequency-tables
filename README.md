@@ -25,6 +25,8 @@ renv::restore()
 ## Access data
 To access the data for this challenge, you first need to get secrets/passwords.
 
+uno 
+
 To get them, proceed as follows:
 
 1. Check the Slack channel for the "secret link" for your challenge
