@@ -1,0 +1,64 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(DBI)
+library(RPostgres)
+library(readr)
+
+readRenviron(".Renviron")
+
+# extract environment variables
+db_name <- Sys.getenv("COOLIFY_DB")
+db_host <- Sys.getenv("COOLIFY_HOST")
+db_port <- Sys.getenv("COOLIFY_PORT")
+db_user <- Sys.getenv("COOLIFY_USER")
+db_password <- Sys.getenv("COOLIFY_PASSWORD")
+
+# create connection
+con <- DBI::dbConnect(drv = RPostgres::Postgres(),
+                      host = db_host,
+                      port = db_port,
+                      dbname = db_name,
+                      user = db_user,
+                      password = db_password)
+
+```
+## Listing tables
+```{r}
+dbListTables(con)
+```
+## Listing fields in tables
+```{r}
+dbListFields(con,"question_item_v1")
+```
+```{r}
+dbListFields(con,"q_response_labelled_en_v1")
+```
+```{r}
+dbListFields(con,"subquestion_v1")
+```
+```{r}
+question_id <- "q27"
+res <- dbSendQuery(con, sprintf("SELECT lang FROM dict_question_text_v1 WHERE question_item_id = '%s'", question_id))
+dbFetch(res)
+```
+
+```{r}
+question_id <- "q27"
+res <- dbSendQuery(con, sprintf("SELECT question_item_id, type_major, type_minor FROM question_item_v1 WHERE type_major = 'Multiple Choice'", question_id))
+dbFetch(res)
+```
+```{r}
+question_id <- "q3"
+res <- dbSendQuery(con, sprintf("SELECT * FROM q_response_labelled_en_v1 WHERE question_item_id = '%s'", question_id))
+dbFetch(res)
+```
+```{r}
+question_id <- "q27"
+res <- dbSendQuery(con, sprintf("SELECT value_label FROM q_response_labelled_en_v1 WHERE question_item_id = '%s'", question_id))
+dbFetch(res)
+```
+

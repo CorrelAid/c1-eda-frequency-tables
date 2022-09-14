@@ -52,7 +52,7 @@ dbFetch(res)
 ```
 Simply counting the number of times a question shows up in responses table.
 ```{r}
-question_id <- "q1"
+question_id <- "q27"
 res <- dbSendQuery(con,sprintf("SELECT question_item_id, COUNT(*) FROM q_response_labelled_de_v1 WHERE question_item_ID = '%s' GROUP BY question_item_id", question_id))
 dbFetch(res)
 ```
@@ -61,14 +61,24 @@ dbFetch(res)
 
 ```{r}
 question_id <- "q1"
-res <- dbSendQuery(con, sprintf("SELECT value, COUNT(value) FROM q_response_labelled_de_v1 WHERE question_item_id = '%s' GROUP BY value ", question_id))
+res <- dbSendQuery(con, sprintf("SELECT value_label, value, COUNT(value) FROM q_response_labelled_de_v1 WHERE question_item_id = '%s' GROUP BY value, value_label", question_id))
 dbFetch(res)
 ```
 ### Multiple Choice Questions
 
 ```{r}
-question_id <- "q28"
-res <- dbSendQuery(con, sprintf("SELECT subquestion_id, value, COUNT(value) FROM q_response_labelled_en_v1 WHERE  question_item_id IN ( SELECT question_item_id from q_response_labelled_en_v1 where question_item_id = '%s') GROUP BY value, subquestion_id", question_id))
+question_id <- "q27"
+res <- dbSendQuery(con, sprintf("SELECT subquestion_id, value, COUNT(value), value_label FROM q_response_labelled_en_v1 WHERE  question_item_id IN ( SELECT question_item_id from q_response_labelled_en_v1 where question_item_id = '%s') GROUP BY value, value_label, subquestion_id", question_id))
+dbFetch(res)
+```
+```{r}
+question_id <- "q27"
+res <- dbSendQuery(con, sprintf("SELECT subquestion_id FROM q_response_labelled_en_v1 WHERE  question_item_id IN ( SELECT question_item_id from q_response_labelled_en_v1 where question_item_id = '%s') GROUP BY subquestion_id", question_id))
+dbFetch(res)
+```
+```{r}
+sub_id <- "q27_SQ001"
+res <- dbSendQuery(con, sprintf("SELECT value_label, value, COUNT(value) FROM q_response_labelled_de_v1 WHERE subquestion_id = '%s' GROUP BY value, value_label", sub_id))
 dbFetch(res)
 ```
 
